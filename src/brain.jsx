@@ -1,56 +1,63 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-/* ─── FULL ENHANCED BRAIN DATA (10 REGIONS) ─── */
 const brainRegions = [
   {
     id: "frontal",
     label: "Frontal Lobe",
     emoji: "🎯",
-    color: "#e74c3c",
-    accentColor: "#ff6b6b",
+    color: "#ff6b6b",
+    accentColor: "#ff9f9f",
     path: "M100,340 C95,270 100,160 150,110 C195,68 290,60 320,100 C340,130 335,230 320,340 Z",
     labelX: 210,
     labelY: 210,
     title: "Frontal Lobe",
     subtitle: "Executive Function & Decision Making",
-    desc: "Bertindak sebagai CEO otak, mengatur fungsi eksekutif seperti perencanaan, pengambilan keputusan, dan kontrol perilaku. Prefrontal Cortex di sini berfungsi sebagai 'filter sosial' yang mencegah Anda mengatakan hal yang mungkin disesali.",
+    desc: "Bertindak sebagai pusat kontrol eksekutif: merencanakan, membuat keputusan, dan mengatur perilaku. Prefrontal cortex berperan sebagai filter sosial yang menahan impuls dan menimbang konsekuensi.",
     detailedDesc:
-      "Frontal lobe adalah pusat kognitif tertinggi yang mengintegrasikan informasi dari seluruh otak. Area Broca yang mengatur produksi bahasa juga berada di sini. Perkembangan frontal lobe berlanjut hingga usia 25 tahun, menjelaskan mengapa remaja cenderung impulsif.",
+      "Frontal lobe mengintegrasikan informasi dari berbagai area untuk mengarahkan tujuan jangka panjang. Area Broca (produksi bahasa) berada di sini, bersama primary motor cortex yang memulai gerakan sadar. Perkembangannya berlanjut hingga sekitar usia 25 tahun.",
     functions: [
-      "Perencanaan",
-      "Keputusan",
+      "Perencanaan Strategis",
+      "Pengambilan Keputusan",
       "Kontrol Perilaku",
       "Kepribadian",
       "Bahasa Ekspresif",
     ],
+    keyStructures: [
+      "Prefrontal Cortex",
+      "Broca's Area",
+      "Primary Motor Cortex",
+      "Orbitofrontal Cortex",
+      "Anterior Cingulate",
+    ],
     clinical:
-      "Kerusakan frontal lobe dapat menyebabkan sindrom dysexecutive - impulsivitas ekstrem, perubahan kepribadian drastis, dan gangguan pengambilan keputusan. Kasus Phineas Gage (1848) menunjukkan perubahan kepribadian total setelah kerusakan frontal lobe.",
+      "Kerusakan frontal lobe dapat menyebabkan dysexecutive syndrome: impulsivitas, perubahan kepribadian, dan gangguan penilaian sosial. Kasus Phineas Gage menunjukkan perubahan kepribadian drastis setelah cedera frontal.",
     connections: [
-      { region: "Parietal Lobe", type: "Executive-Sensory Integration" },
-      { region: "Temporal Lobe", type: "Memory-Decision Loop" },
-      { region: "Limbic System", type: "Emotion Regulation" },
+      { targetId: "parietal", type: "Executive-Sensory Integration" },
+      { targetId: "temporal", type: "Memory-Decision Loop" },
+      { targetId: "limbic", type: "Emotion Regulation" },
     ],
     neurotransmitters: ["Dopamine", "Glutamate", "Serotonin"],
     activity: 78,
-    connections: 124,
+    connectionCount: 124,
     region: "Anterior",
     volume: "~41% of Cortex",
+    aiAnalogy: "Model perencana (planner) yang memutuskan prioritas aksi.",
   },
   {
     id: "parietal",
     label: "Parietal Lobe",
     emoji: "📡",
-    color: "#3498db",
-    accentColor: "#5dade2",
+    color: "#4aa3ff",
+    accentColor: "#7db9ff",
     path: "M310,280 C308,200 315,120 360,85 C400,58 470,70 490,120 C505,165 498,230 490,280 Z",
     labelX: 400,
     labelY: 185,
     title: "Parietal Lobe",
     subtitle: "Sensory Integration & Spatial Awareness",
-    desc: "Bertindak sebagai hub sensorik yang mengintegrasikan informasi sentuhan, suhu, nyeri, dan posisi tubuh. Somatosensory Cortex di sini memetakan seluruh tubuh dengan area sensitif yang lebih besar untuk bagian tubuh dengan banyak reseptor.",
+    desc: "Hub sensorik yang menggabungkan sentuhan, suhu, nyeri, dan posisi tubuh. Membentuk peta ruang 3D untuk orientasi dan navigasi.",
     detailedDesc:
-      "Parietal lobe mengintegrasikan informasi dari berbagai indera untuk membentuk persepsi lingkungan 3D. Area ini juga terlibat dalam perhitungan matematika dan pemahaman simbol. Lobus parietal kanan mengatur perhatian spasial, sedangkan kiri lebih terlibat dalam bahasa.",
+      "Somatosensory cortex memetakan tubuh berdasarkan kepadatan reseptor. Parietal lobe juga penting untuk perhitungan, manipulasi simbol, dan perhatian spasial. Lobus kanan dominan untuk perhatian spasial global.",
     functions: [
       "Integrasi Sensorik",
       "Navigasi Spasial",
@@ -58,33 +65,41 @@ const brainRegions = [
       "Kognisi Numerik",
       "Perhatian",
     ],
+    keyStructures: [
+      "Primary Somatosensory Cortex",
+      "Superior Parietal Lobule",
+      "Inferior Parietal Lobule",
+      "Angular Gyrus",
+      "Supramarginal Gyrus",
+    ],
     clinical:
-      "Kerusakan dapat menyebabkan hemispatial neglect - mengabaikan satu sisi ruang (biasanya kiri). Pasien mungkin hanya makan setengah piring, mencukur setengah wajah, atau menggambar setengah objek tanpa menyadarinya.",
+      "Kerusakan dapat menimbulkan hemispatial neglect: mengabaikan satu sisi ruang. Pasien bisa hanya makan setengah piring atau menggambar setengah objek tanpa sadar.",
     connections: [
-      { region: "Frontal Lobe", type: "Sensory-Motor Integration" },
-      { region: "Occipital Lobe", type: "Visual-Spatial Processing" },
-      { region: "Thalamus", type: "Sensory Relay" },
+      { targetId: "frontal", type: "Sensory-Motor Integration" },
+      { targetId: "occipital", type: "Visual-Spatial Processing" },
+      { targetId: "thalamus", type: "Sensory Relay" },
     ],
     neurotransmitters: ["Glutamate", "Acetylcholine", "GABA"],
     activity: 62,
-    connections: 98,
+    connectionCount: 98,
     region: "Dorsal-Posterior",
     volume: "~19% of Cortex",
+    aiAnalogy: "Fusi data multi-sensor untuk membangun peta lingkungan.",
   },
   {
     id: "occipital",
     label: "Occipital Lobe",
     emoji: "👁️",
-    color: "#9b59b6",
-    accentColor: "#bb8fce",
+    color: "#9c7bff",
+    accentColor: "#c0abff",
     path: "M480,270 C478,220 485,170 510,150 C535,132 575,140 588,175 C598,210 595,250 588,280 C580,300 490,295 480,270 Z",
     labelX: 535,
     labelY: 215,
     title: "Occipital Lobe",
     subtitle: "Visual Processing Center",
-    desc: "Pusat pengolahan visual yang mengubah sinyal cahaya menjadi gambar bermakna. Informasi visual diproses secara bertahap: dari bentuk dasar di Primary Visual Cortex (V1) hingga pengenalan objek kompleks di area ventral.",
+    desc: "Pusat pengolahan visual yang mengubah sinyal cahaya menjadi objek bermakna. Informasi visual diproses bertahap dari fitur dasar hingga pengenalan kompleks.",
     detailedDesc:
-      "Setiap mata mengirim informasi ke kedua sisi otak. Occipital lobe mengandung peta retina yang terdistorsi - fovea (pusat penglihatan) mendapat area korteks yang jauh lebih besar daripada perifer. Proses penglihatan melibatkan aliran ventral (what pathway) dan dorsal (where pathway).",
+      "Occipital lobe memiliki peta retina (retinotopic map) dengan representasi fovea yang sangat besar. Jalur ventral memproses identitas objek, jalur dorsal memproses lokasi dan gerak.",
     functions: [
       "Penglihatan",
       "Interpretasi Visual",
@@ -92,33 +107,41 @@ const brainRegions = [
       "Depth Perception",
       "Pengenalan Wajah",
     ],
+    keyStructures: [
+      "Primary Visual Cortex (V1)",
+      "Visual Cortex V2/V3",
+      "V4 Color Area",
+      "MT/V5 Motion Area",
+      "Calcarine Sulcus",
+    ],
     clinical:
-      "Cortical blindness - mata sehat tetapi otak tidak dapat memproses informasi visual. Anton-Babinski syndrome: pasien buta tetapi menyangkal kebutaannya. Visual agnosia: dapat melihat tetapi tidak mengenali objek.",
+      "Cortical blindness: mata sehat tetapi otak tidak memproses visual. Anton-Babinski: pasien buta tetapi menyangkal kebutaannya. Visual agnosia: melihat tanpa mengenali objek.",
     connections: [
-      { region: "Parietal Lobe", type: "Where Pathway" },
-      { region: "Temporal Lobe", type: "What Pathway" },
-      { region: "Thalamus", type: "Visual Relay" },
+      { targetId: "parietal", type: "Where Pathway" },
+      { targetId: "temporal", type: "What Pathway" },
+      { targetId: "thalamus", type: "Visual Relay" },
     ],
     neurotransmitters: ["Glutamate", "GABA", "Acetylcholine"],
     activity: 71,
-    connections: 87,
+    connectionCount: 87,
     region: "Posterior",
     volume: "~18% of Cortex",
+    aiAnalogy: "Vision encoder: ekstraksi fitur hingga pengenalan objek.",
   },
   {
     id: "temporal",
     label: "Temporal Lobe",
     emoji: "💬",
-    color: "#e67e22",
-    accentColor: "#f5b041",
+    color: "#ff9f4a",
+    accentColor: "#ffbf7d",
     path: "M420,275 C418,310 425,370 460,410 C490,438 545,440 570,415 C590,390 585,340 578,290 C570,265 425,260 420,275 Z",
     labelX: 498,
     labelY: 355,
     title: "Temporal Lobe",
     subtitle: "Memory, Language & Auditory Processing",
-    desc: "Pusat memori jangka panjang dan pemrosesan bahasa. Hippocampus (pembentuk memori baru) dan amygdala (pemrosesan emosi) berada di lobus temporal medial. Area Wernicke di sini mengatur pemahaman bahasa.",
+    desc: "Pusat memori jangka panjang dan pemrosesan bahasa. Hippocampus membentuk memori baru dan amygdala menambahkan bobot emosional.",
     detailedDesc:
-      "Temporal lobe mengintegrasikan informasi dari berbagai indera untuk membentuk memori episodik. Memori jangka panjang disimpan secara distributif di seluruh neokorteks, tetapi hippocampus diperlukan untuk konsolidasi awal. Lobus temporal juga terlibat dalam pengenalan wajah dan objek kompleks.",
+      "Temporal lobe menyimpan representasi memori episodik yang tersebar. Area Wernicke mengatur pemahaman bahasa, sedangkan cortex auditori memproses suara kompleks.",
     functions: [
       "Memori Jangka Panjang",
       "Pemahaman Bahasa",
@@ -126,33 +149,41 @@ const brainRegions = [
       "Pemrosesan Auditori",
       "Emosi",
     ],
+    keyStructures: [
+      "Hippocampus",
+      "Amygdala",
+      "Primary Auditory Cortex",
+      "Wernicke's Area",
+      "Fusiform Gyrus",
+    ],
     clinical:
-      "Anterograde amnesia: ketidakmampuan membentuk memori baru (kasus H.M.). Wernicke's aphasia: berbicara lancar tetapi tidak koheren dan tidak memahami ucapan orang lain. Temporal lobe epilepsy dapat menyebabkan pengalaman religius atau deja vu.",
+      "Anterograde amnesia: tidak bisa membentuk memori baru (kasus H.M.). Wernicke's aphasia: bicara lancar tapi tidak koheren. Temporal lobe epilepsy bisa memicu deja vu.",
     connections: [
-      { region: "Frontal Lobe", type: "Memory-Decision Loop" },
-      { region: "Limbic System", type: "Emotional Memory" },
-      { region: "Occipital Lobe", type: "Visual Recognition" },
+      { targetId: "frontal", type: "Memory-Decision Loop" },
+      { targetId: "limbic", type: "Emotional Memory" },
+      { targetId: "occipital", type: "Visual Recognition" },
     ],
     neurotransmitters: ["Glutamate", "GABA", "Acetylcholine"],
     activity: 84,
-    connections: 156,
+    connectionCount: 156,
     region: "Lateral-Inferior",
     volume: "~22% of Cortex",
+    aiAnalogy: "Memory indexer & language decoder.",
   },
   {
     id: "limbic",
     label: "Limbic System",
     emoji: "⚡",
-    color: "#f39c12",
-    accentColor: "#f7dc6f",
+    color: "#f6c453",
+    accentColor: "#ffe1a3",
     path: "M290,310 C288,275 295,240 330,225 C360,213 410,218 425,245 C437,268 432,305 420,325 C405,342 295,340 290,310 Z",
     labelX: 355,
     labelY: 280,
     title: "Limbic System",
     subtitle: "Emotional Processing & Memory Formation",
-    desc: "Jaringan struktur yang mengatur emosi, motivasi, pembelajaran, dan memori. Amygdala sebagai 'alarm system' emosional, hippocampus sebagai 'recorder' memori, dan cingulate gyrus mengatur konflik dan perhatian emosional.",
+    desc: "Jaringan struktur yang mengatur emosi, motivasi, pembelajaran, dan memori. Amygdala sebagai alarm emosional, hippocampus sebagai pembentuk memori.",
     detailedDesc:
-      "Sistem limbic merupakan otak 'paleomammalian' yang berkembang pada mamalia awal. Mengatur respons fight-or-flight melalui koneksi ke hypothalamus. Memori emosional lebih kuat karena amygdala memodulasi konsolidasi memori di hippocampus. Juga terlibat dalam reward system melalui nucleus accumbens.",
+      "Sistem limbik menghubungkan emosi dengan respon tubuh melalui hypothalamus. Reward system (nucleus accumbens) menguatkan perilaku yang memberi rasa senang.",
     functions: [
       "Regulasi Emosi",
       "Formasi Memori",
@@ -160,33 +191,41 @@ const brainRegions = [
       "Respons Stress",
       "Reward Processing",
     ],
+    keyStructures: [
+      "Amygdala",
+      "Hippocampus",
+      "Cingulate Gyrus",
+      "Nucleus Accumbens",
+      "Septal Nuclei",
+    ],
     clinical:
-      "Hiperaktivitas amygdala terkait dengan anxiety disorders, PTSD, dan phobia. Kerusakan hippocampus menyebabkan amnesia. Depression terkait dengan disregulasi sistem limbic-prefrontal circuit. Abnormalitas cingulate cortex pada OCD.",
+      "Hiperaktivitas amygdala terkait anxiety dan PTSD. Kerusakan hippocampus menyebabkan amnesia. Depresi terkait disregulasi sirkuit limbik-prefrontal.",
     connections: [
-      { region: "Prefrontal Cortex", type: "Emotion Regulation" },
-      { region: "Hypothalamus", type: "Autonomic Response" },
-      { region: "All Sensory Areas", type: "Emotional Tagging" },
+      { targetId: "frontal", type: "Emotion Regulation" },
+      { targetId: "hypothalamus", type: "Autonomic Response" },
+      { targetId: "temporal", type: "Emotional Memory" },
     ],
     neurotransmitters: ["Serotonin", "Dopamine", "Norepinephrine", "GABA"],
     activity: 91,
-    connections: 201,
+    connectionCount: 201,
     region: "Deep-Medial",
     volume: "~5% of Brain Volume",
+    aiAnalogy: "Reward engine yang memberi bobot emosi pada keputusan.",
   },
   {
     id: "thalamus",
     label: "Thalamus",
     emoji: "🔄",
-    color: "#1abc9c",
-    accentColor: "#76d7c4",
+    color: "#34cdb5",
+    accentColor: "#78e6d7",
     path: "M320,275 C318,255 325,235 348,228 C368,222 395,228 400,248 C404,265 398,278 388,285 C370,292 322,288 320,275 Z",
     labelX: 358,
     labelY: 258,
     title: "Thalamus",
     subtitle: "Central Relay Station & Consciousness",
-    desc: "Stasiun relay utama yang mengarahkan hampir semua informasi sensorik ke korteks yang sesuai. Bertindak sebagai 'gatekeeper' kesadaran dengan mengatur aliran informasi antara brainstem dan cerebral cortex.",
+    desc: "Stasiun relay utama yang mengarahkan hampir semua informasi sensorik ke korteks. Mengatur aliran informasi untuk perhatian dan kesadaran.",
     detailedDesc:
-      "Thalamus terdiri dari beberapa nuklei spesifik yang memproses modalitas sensorik berbeda. Selain relay sensorik, thalamus juga terlibat dalam regulasi kesadaran, perhatian, dan siklus tidur-bangun melalui koneksi dengan reticular activating system. Memainkan peran kritis dalam integrasi informasi multimodal.",
+      "Thalamus memiliki nuklei spesifik untuk modalitas sensorik. Berperan dalam integrasi multimodal dan modulasi ritme tidur-bangun.",
     functions: [
       "Sensory Relay",
       "Regulasi Kesadaran",
@@ -194,33 +233,41 @@ const brainRegions = [
       "Regulasi Tidur",
       "Perhatian",
     ],
+    keyStructures: [
+      "LGN (Visual)",
+      "MGN (Auditory)",
+      "Pulvinar",
+      "Ventral Anterior Nucleus",
+      "Intralaminar Nuclei",
+    ],
     clinical:
-      "Thalamic stroke dapat menyebabkan thalamic pain syndrome (nyeri sentral hebat), gangguan tidur kronis, atau gangguan memori. Kerusakan intralaminar nuclei dapat mengakibatkan gangguan kesadaran atau koma.",
+      "Thalamic stroke dapat memicu thalamic pain syndrome dan gangguan kesadaran. Kerusakan intralaminar nuclei dapat mengakibatkan koma.",
     connections: [
-      { region: "Cerebral Cortex", type: "Bidirectional Relay" },
-      { region: "Brainstem", type: "Consciousness Regulation" },
-      { region: "Basal Ganglia", type: "Motor Modulation" },
+      { targetId: "frontal", type: "Cortico-Thalamic Loop" },
+      { targetId: "brainstem", type: "Consciousness Regulation" },
+      { targetId: "basalGanglia", type: "Motor Modulation" },
     ],
     neurotransmitters: ["Glutamate", "GABA", "Acetylcholine"],
     activity: 55,
-    connections: 342,
+    connectionCount: 342,
     region: "Central-Deep",
     volume: "~2% of Brain Volume",
+    aiAnalogy: "Router utama yang mengarahkan sinyal ke modul yang tepat.",
   },
   {
     id: "hypothalamus",
     label: "Hypothalamus",
     emoji: "🌡️",
-    color: "#27ae60",
-    accentColor: "#58d68d",
+    color: "#5bc86a",
+    accentColor: "#8be39a",
     path: "M325,288 C323,302 328,320 350,328 C370,334 392,330 398,318 C403,306 398,290 390,286 C372,280 327,282 325,288 Z",
     labelX: 360,
     labelY: 310,
     title: "Hypothalamus",
     subtitle: "Homeostasis & Endocrine Control",
-    desc: "Pusat kendali homeostasis yang mengatur suhu tubuh, lapar, haus, siklus tidur-bangun, dan respons stres melalui sistem endokrin. Menghubungkan sistem saraf dengan sistem hormonal melalui pituitary gland.",
+    desc: "Pusat kendali homeostasis: suhu, lapar, haus, siklus tidur-bangun, dan respons stres. Menghubungkan sistem saraf dengan hormonal.",
     detailedDesc:
-      "Hypothalamus mengintegrasikan sinyal dari tubuh dan otak untuk mempertahankan keseimbangan internal (homeostasis). Mengandung 'biological clock' (suprachiasmatic nucleus) yang mengatur circadian rhythm. Juga mengontrol respons stres melalui HPA axis (hypothalamic-pituitary-adrenal).",
+      "Mengatur ritme sirkadian melalui suprachiasmatic nucleus. Mengontrol HPA axis untuk respons stres dan mengatur pelepasan hormon dari pituitary.",
     functions: [
       "Homeostasis",
       "Regulasi Suhu",
@@ -228,33 +275,41 @@ const brainRegions = [
       "Ritme Sirkadian",
       "Perilaku Insting",
     ],
-    clinical:
-      "Lesi dapat menyebabkan diabetes insipidus (haus berlebihan), gangguan makan (hyperphagia atau aphagia), gangguan tidur, atau disregulasi suhu tubuh. Tumor seperti craniopharyngioma dapat menekan hypothalamus.",
-    connections: [
-      { region: "Pituitary Gland", type: "Endocrine Control" },
-      { region: "Limbic System", type: "Emotional Response" },
-      { region: "Brainstem", type: "Autonomic Regulation" },
+    keyStructures: [
+      "Suprachiasmatic Nucleus",
+      "Arcuate Nucleus",
+      "Paraventricular Nucleus",
+      "Mammillary Bodies",
+      "Pituitary Stalk",
     ],
-    neurotransmitters: ["Various Neuropeptides", "Dopamine", "GABA"],
+    clinical:
+      "Lesi dapat menyebabkan gangguan tidur, diabetes insipidus, perubahan nafsu makan, dan disregulasi suhu tubuh.",
+    connections: [
+      { targetId: "limbic", type: "Emotional Response" },
+      { targetId: "brainstem", type: "Autonomic Regulation" },
+      { targetId: "thalamus", type: "Circadian Integration" },
+    ],
+    neurotransmitters: ["Neuropeptides", "Dopamine", "GABA"],
     activity: 67,
-    connections: 78,
+    connectionCount: 78,
     region: "Ventral-Deep",
     volume: "<1% of Brain Volume",
+    aiAnalogy: "Autopilot homeostasis yang menjaga sistem tetap stabil.",
   },
   {
     id: "basalGanglia",
     label: "Basal Ganglia",
     emoji: "🔁",
-    color: "#e84393",
-    accentColor: "#f8c471",
+    color: "#ff7aa2",
+    accentColor: "#ffb3c7",
     path: "M260,270 C258,252 264,238 282,232 C298,227 318,233 320,248 C322,262 316,275 306,280 C290,285 262,282 260,270 Z",
     labelX: 290,
     labelY: 258,
     title: "Basal Ganglia",
     subtitle: "Motor Control & Habit Formation",
-    desc: "Kelompok nuklei subkortikal yang mengatur gerakan voluntar, pembelajaran kebiasaan, dan sistem reward. Mengintegrasikan informasi dari korteks untuk memilih dan memulai gerakan yang tepat sambil menekan gerakan yang tidak diinginkan.",
+    desc: "Kelompok nuklei subkortikal yang memilih dan memulai gerakan yang tepat, serta menekan gerakan yang tidak dibutuhkan. Penting untuk kebiasaan.",
     detailedDesc:
-      "Basal ganglia beroperasi melalui sirkuit langsung (facilitasi gerakan) dan tidak langsung (inhibisi gerakan). Sistem dopamine dari substantia nigra memodulasi sirkuit ini. Juga terlibat dalam pembelajaran procedural (keterampilan motorik) dan pembentukan kebiasaan otomatis.",
+      "Sirkuit langsung memfasilitasi gerakan dan sirkuit tidak langsung menghambat gerakan. Dopamine dari substantia nigra memodulasi keseimbangan ini.",
     functions: [
       "Kontrol Motor",
       "Pembelajaran Kebiasaan",
@@ -262,33 +317,41 @@ const brainRegions = [
       "Seleksi Gerakan",
       "Kognisi Procedural",
     ],
+    keyStructures: [
+      "Caudate Nucleus",
+      "Putamen",
+      "Globus Pallidus",
+      "Substantia Nigra",
+      "Subthalamic Nucleus",
+    ],
     clinical:
-      "Degenerasi sel dopamine di substantia nigra menyebabkan Parkinson's disease (tremor, bradykinesia, rigidity). Huntington's disease melibatkan degenerasi striatum (gerakan tak terkendali). Dyskinesia dapat terjadi sebagai efek samping obat antipsikotik.",
+      "Parkinson terjadi karena degenerasi dopamine. Huntington melibatkan degenerasi striatum. Dyskinesia dapat muncul sebagai efek samping obat.",
     connections: [
-      { region: "Cerebral Cortex", type: "Motor Planning" },
-      { region: "Thalamus", type: "Motor Feedback" },
-      { region: "Substantia Nigra", type: "Dopamine Modulation" },
+      { targetId: "thalamus", type: "Motor Feedback" },
+      { targetId: "frontal", type: "Motor Planning" },
+      { targetId: "brainstem", type: "Posture Modulation" },
     ],
     neurotransmitters: ["Dopamine", "GABA", "Glutamate", "Acetylcholine"],
     activity: 73,
-    connections: 109,
+    connectionCount: 109,
     region: "Sub-Cortical",
     volume: "~3% of Brain Volume",
+    aiAnalogy: "Policy selector yang menyalakan aksi dan mematikan noise.",
   },
   {
     id: "cerebellum",
     label: "Cerebellum",
     emoji: "🎨",
-    color: "#fd79a8",
-    accentColor: "#f1948a",
+    color: "#ff8fb1",
+    accentColor: "#ffc0d4",
     path: "M500,380 C498,345 505,310 535,295 C560,282 600,288 615,315 C627,340 622,375 612,400 C600,420 505,418 500,380 Z",
     labelX: 558,
     labelY: 350,
     title: "Cerebellum",
     subtitle: "Motor Coordination & Cognitive Timing",
-    desc: "Meskipun hanya 10% volume otak, mengandung lebih dari 50% total neuron. Mengatur koordinasi gerakan, keseimbangan, dan timing motorik. Juga terlibat dalam fungsi kognitif seperti bahasa, perhatian, dan pengaturan emosi.",
+    desc: "Meski hanya 10% volume, cerebellum menyimpan lebih dari 50% neuron. Mengatur koordinasi, keseimbangan, dan timing gerakan.",
     detailedDesc:
-      "Cerebellum menerima salinan perintah motorik dari cortex dan feedback sensorik untuk membandingkan rencana dengan eksekusi. Melakukan koreksi halus dalam milidetik. Memiliki struktur berulang yang sangat teratur (microcircuits). Recent research menunjukkan peran dalam fungsi kognitif dan emosional.",
+      "Menerima salinan perintah motorik dan feedback sensorik untuk koreksi cepat. Pola microcircuit yang teratur memungkinkan presisi milidetik.",
     functions: [
       "Koordinasi Motor",
       "Keseimbangan",
@@ -296,33 +359,41 @@ const brainRegions = [
       "Belajar Motorik",
       "Fungsi Kognitif",
     ],
+    keyStructures: [
+      "Cerebellar Vermis",
+      "Cerebellar Hemispheres",
+      "Dentate Nucleus",
+      "Purkinje Cells",
+      "Flocculonodular Lobe",
+    ],
     clinical:
-      "Kerusakan menyebabkan ataxia - gangguan koordinasi, tremor intention, dismetria (kesulitan mengukur jarak), dan gangguan keseimbangan. Cerebellar mutism dapat terjadi setelah operasi. Juga terkait dengan gangguan perkembangan seperti autism.",
+      "Kerusakan menyebabkan ataxia, tremor intention, dan dismetria. Cerebellar mutism dapat terjadi pasca operasi.",
     connections: [
-      { region: "Cerebral Cortex", type: "Cortico-Cerebellar Loop" },
-      { region: "Brainstem", type: "Balance & Posture" },
-      { region: "Spinal Cord", type: "Reflex Modulation" },
+      { targetId: "brainstem", type: "Balance & Posture" },
+      { targetId: "frontal", type: "Cortico-Cerebellar Loop" },
+      { targetId: "parietal", type: "Sensorimotor Timing" },
     ],
     neurotransmitters: ["Glutamate", "GABA"],
     activity: 48,
-    connections: 67,
+    connectionCount: 67,
     region: "Posterior-Inferior",
     volume: "~10% of Brain Volume",
+    aiAnalogy: "Stabilizer yang melakukan koreksi mikro secara real-time.",
   },
   {
     id: "brainstem",
     label: "Brain Stem",
     emoji: "❤️",
-    color: "#6c5ce7",
-    accentColor: "#a29bfe",
+    color: "#7d8cff",
+    accentColor: "#b1bbff",
     path: "M380,335 C378,365 375,410 380,460 C383,490 395,510 415,512 C435,510 448,490 450,460 C454,410 450,365 445,335 C440,320 385,318 380,335 Z",
     labelX: 415,
     labelY: 420,
     title: "Brain Stem",
     subtitle: "Vital Functions & Consciousness",
-    desc: "Struktur paling kuno dan kritis yang mengatur fungsi vital otomatis: pernapasan, detak jantung, tekanan darah, dan kesadaran. Menghubungkan otak dengan spinal cord dan mengandung nuclei cranial nerves.",
+    desc: "Struktur paling kuno yang mengatur fungsi vital otomatis: pernapasan, detak jantung, tekanan darah, dan kesadaran.",
     detailedDesc:
-      "Terdiri dari midbrain, pons, dan medulla oblongata. Mengandung reticular formation yang mengatur kesadaran dan siklus tidur-bangun. Juga berperan dalam refleks protektif seperti batuk, bersin, dan menelan. Merupakan jalur utama semua informasi sensorik dan motorik antara otak dan tubuh.",
+      "Terdiri dari midbrain, pons, dan medulla. Reticular formation mengatur kewaspadaan dan siklus tidur. Jalur utama semua informasi sensorik dan motorik.",
     functions: [
       "Fungsi Vital",
       "Kesadaran",
@@ -330,12 +401,19 @@ const brainRegions = [
       "Autonomic Control",
       "Integrasi Sensorimotor",
     ],
+    keyStructures: [
+      "Midbrain",
+      "Pons",
+      "Medulla Oblongata",
+      "Reticular Formation",
+      "Cranial Nerve Nuclei",
+    ],
     clinical:
-      "Kerusakan brainstem sering fatal. Brainstem stroke dapat menyebabkan locked-in syndrome (sadar tetapi tidak dapat bergerak kecuali mata). Herniasi brainstem adalah komplikasi berbahaya dari tekanan intrakranial meningkat. Cranial nerve palsies sering berasal dari brainstem lesions.",
+      "Kerusakan brainstem sering fatal. Brainstem stroke bisa menyebabkan locked-in syndrome. Herniasi brainstem adalah kondisi emergensi.",
     connections: [
-      { region: "Spinal Cord", type: "Ascending/Descending Tracts" },
-      { region: "Cerebral Cortex", type: "Consciousness Pathways" },
-      { region: "Cerebellum", type: "Coordination Circuits" },
+      { targetId: "thalamus", type: "Arousal Pathways" },
+      { targetId: "cerebellum", type: "Coordination Circuits" },
+      { targetId: "spinalCord", type: "Ascending/Descending Tracts" },
     ],
     neurotransmitters: [
       "Serotonin",
@@ -344,30 +422,27 @@ const brainRegions = [
       "Acetylcholine",
     ],
     activity: 99,
-    connections: 88,
+    connectionCount: 88,
     region: "Medulla-Pons",
     volume: "~2.5% of Brain Volume",
+    aiAnalogy: "Kernel sistem yang menjaga proses vital tetap berjalan.",
   },
 ];
 
-/* ─── SCANNING LINE ─── */
-function ScanLine() {
-  return (
-    <motion.line
-      x1="60"
-      y1="50"
-      x2="640"
-      y2="50"
-      stroke="rgba(0,200,255,0.25)"
-      strokeWidth="2"
-      strokeDasharray="8 4"
-      animate={{ y1: [50, 550, 50], y2: [50, 550, 50] }}
-      transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-    />
-  );
-}
+const anchorPoints = {
+  frontal: { x: 220, y: 190 },
+  parietal: { x: 420, y: 200 },
+  occipital: { x: 525, y: 210 },
+  temporal: { x: 520, y: 350 },
+  limbic: { x: 370, y: 275 },
+  thalamus: { x: 365, y: 260 },
+  hypothalamus: { x: 360, y: 315 },
+  basalGanglia: { x: 295, y: 255 },
+  cerebellum: { x: 565, y: 360 },
+  brainstem: { x: 415, y: 430 },
+  spinalCord: { x: 415, y: 520 },
+};
 
-/* ─── PULSE DOT ─── */
 function PulseDot({ x, y, color }) {
   return (
     <g>
@@ -376,11 +451,8 @@ function PulseDot({ x, y, color }) {
         cy={y}
         r="4"
         fill={color}
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [1, 0.7, 1],
-        }}
-        transition={{ duration: 1.5, repeat: Infinity }}
+        animate={{ scale: [1, 1.25, 1], opacity: [0.9, 0.6, 0.9] }}
+        transition={{ duration: 1.8, repeat: Infinity }}
       />
       <motion.circle
         cx={x}
@@ -388,319 +460,159 @@ function PulseDot({ x, y, color }) {
         r="4"
         fill="none"
         stroke={color}
-        strokeWidth="1.5"
-        animate={{ r: [4, 15], opacity: [0.6, 0] }}
-        transition={{ duration: 1.8, repeat: Infinity }}
+        strokeWidth="1.2"
+        animate={{ r: [4, 16], opacity: [0.5, 0] }}
+        transition={{ duration: 2, repeat: Infinity }}
       />
     </g>
   );
 }
 
-/* ─── NEURAL CONNECTION LINES ─── */
 function NeuralConnections({ activeRegion }) {
   if (!activeRegion) return null;
 
-  const connectionPoints = {
-    frontal: [
-      { x: 220, y: 180, target: "parietal", color: "#3498db" },
-      { x: 230, y: 200, target: "temporal", color: "#e67e22" },
-      { x: 210, y: 220, target: "limbic", color: "#f39c12" },
-    ],
-    parietal: [
-      { x: 420, y: 200, target: "frontal", color: "#e74c3c" },
-      { x: 450, y: 190, target: "occipital", color: "#9b59b6" },
-      { x: 430, y: 210, target: "thalamus", color: "#1abc9c" },
-    ],
-    temporal: [
-      { x: 520, y: 340, target: "frontal", color: "#e74c3c" },
-      { x: 510, y: 360, target: "limbic", color: "#f39c12" },
-      { x: 530, y: 320, target: "occipital", color: "#9b59b6" },
-    ],
-    limbic: [
-      { x: 370, y: 270, target: "frontal", color: "#e74c3c" },
-      { x: 360, y: 290, target: "hypothalamus", color: "#27ae60" },
-      { x: 380, y: 280, target: "all", color: "#ffffff" },
-    ],
-    thalamus: [
-      { x: 370, y: 250, target: "cortex", color: "#ffffff" },
-      { x: 360, y: 265, target: "brainstem", color: "#6c5ce7" },
-      { x: 375, y: 260, target: "basalGanglia", color: "#e84393" },
-    ],
-  };
-
-  const points = connectionPoints[activeRegion.id];
-  if (!points) return null;
+  const from = anchorPoints[activeRegion.id];
+  if (!from) return null;
 
   return (
     <g>
-      {points.map((point, i) => (
-        <motion.line
-          key={i}
-          x1={point.x}
-          y1={point.y}
-          x2={point.x + (Math.random() * 60 - 30)}
-          y2={point.y + (Math.random() * 60 - 30)}
-          stroke={point.color}
-          strokeWidth="1.2"
-          strokeDasharray="4 2"
-          opacity="0.4"
-          initial={{ pathLength: 0, opacity: 0 }}
-          animate={{ pathLength: 1, opacity: 0.4 }}
-          transition={{ duration: 1.5, delay: i * 0.2 }}
-        />
-      ))}
+      {activeRegion.connections.map((conn, i) => {
+        const target = anchorPoints[conn.targetId];
+        if (!target) return null;
+        return (
+          <motion.line
+            key={`${conn.targetId}-${i}`}
+            x1={from.x}
+            y1={from.y}
+            x2={target.x}
+            y2={target.y}
+            stroke={activeRegion.accentColor}
+            strokeWidth="1.5"
+            strokeDasharray="6 4"
+            opacity="0.45"
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={{ pathLength: 1, opacity: 0.45 }}
+            transition={{ duration: 1.1, delay: i * 0.15 }}
+          />
+        );
+      })}
     </g>
   );
 }
 
-/* ─── ACTIVITY BAR ─── */
-function ActivityBar({ value, color, label, showPercentage = true }) {
+function InfoCard({ title, children }) {
   return (
-    <div style={{ marginBottom: 12 }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          fontSize: 11,
-          color: "#666",
-          letterSpacing: 1.2,
-          marginBottom: 6,
-          textTransform: "uppercase",
-        }}
-      >
-        <span>{label}</span>
-        {showPercentage && (
-          <span
-            style={{
-              color,
-              fontFamily: "'Inter', sans-serif",
-              fontWeight: 600,
-            }}
-          >
-            {value}%
-          </span>
-        )}
-      </div>
-      <div
-        style={{
-          height: 6,
-          background: "rgba(255,255,255,0.08)",
-          borderRadius: 4,
-          overflow: "hidden",
-        }}
-      >
-        <motion.div
-          initial={{ width: "0%" }}
-          animate={{ width: `${value}%` }}
-          transition={{ duration: 1.6, ease: "easeOut" }}
-          style={{
-            height: "100%",
-            background: `linear-gradient(90deg, ${color}40, ${color})`,
-            borderRadius: 4,
-            boxShadow: `0 0 8px ${color}40`,
-          }}
-        />
-      </div>
-    </div>
-  );
-}
-
-/* ─── INFO CARD ─── */
-function InfoCard({ title, children, color }) {
-  return (
-    <div
-      style={{
-        background: "rgba(255,255,255,0.03)",
-        borderRadius: 12,
-        padding: "16px",
-        border: `1px solid ${color}20`,
-        marginBottom: 16,
-      }}
-    >
-      <div
-        style={{
-          fontSize: 10,
-          color: color,
-          letterSpacing: 1.5,
-          marginBottom: 10,
-          textTransform: "uppercase",
-          fontWeight: 600,
-        }}
-      >
-        {title}
-      </div>
+    <div className="info-card">
+      <div className="info-card-title">{title}</div>
       {children}
     </div>
   );
 }
 
-/* ─── CORNER BRACKETS ─── */
-function CornerBrackets({ color = "rgba(255,255,255,0.15)", size = 16 }) {
-  const b = {
-    position: "absolute",
-    width: size,
-    height: size,
-    pointerEvents: "none",
-  };
-  const h = {
-    position: "absolute",
-    height: 2,
-    width: "100%",
-    background: color,
-  };
-  const v = {
-    position: "absolute",
-    width: 2,
-    height: "100%",
-    background: color,
-  };
+function StatPill({ label, value }) {
   return (
-    <>
-      <div style={{ ...b, top: 0, left: 0 }}>
-        <div style={{ ...h, top: 0 }} />
-        <div style={{ ...v, left: 0 }} />
-      </div>
-      <div style={{ ...b, top: 0, right: 0 }}>
-        <div style={{ ...h, top: 0 }} />
-        <div style={{ ...v, right: 0 }} />
-      </div>
-      <div style={{ ...b, bottom: 0, left: 0 }}>
-        <div style={{ ...h, bottom: 0 }} />
-        <div style={{ ...v, left: 0 }} />
-      </div>
-      <div style={{ ...b, bottom: 0, right: 0 }}>
-        <div style={{ ...h, bottom: 0 }} />
-        <div style={{ ...v, right: 0 }} />
-      </div>
-    </>
+    <div className="stat-pill">
+      <span>{label}</span>
+      <strong>{value}</strong>
+    </div>
   );
 }
 
-/* ─── MAIN COMPONENT ─── */
 export default function UltimateBrainMap() {
   const [selected, setSelected] = useState(null);
   const [hovered, setHovered] = useState(null);
-  const [tick, setTick] = useState(0);
-  const [viewMode, setViewMode] = useState("anatomy"); // anatomy, connections, functions
+  const [viewMode, setViewMode] = useState("anatomy");
   const active = selected || hovered;
 
-  useEffect(() => {
-    const t = setInterval(() => setTick((n) => n + 1), 1000);
-    return () => clearInterval(t);
+  const stats = useMemo(() => {
+    const totalConnections = brainRegions.reduce(
+      (acc, region) => acc + region.connectionCount,
+      0,
+    );
+    const avgActivity = Math.round(
+      brainRegions.reduce((acc, region) => acc + region.activity, 0) /
+        brainRegions.length,
+    );
+    return {
+      totalConnections,
+      avgActivity,
+    };
   }, []);
 
-  const minutes = String(Math.floor(tick / 60)).padStart(2, "0");
-  const secs = String(tick % 60).padStart(2, "0");
-
   return (
-    <div style={S.root}>
-      {/* AMBIENT BACKGROUND */}
-      <div style={S.backgroundGradient} />
-      <motion.div
-        animate={{
-          background: active
-            ? `radial-gradient(ellipse at center, ${active.color}15 0%, transparent 70%)`
-            : "transparent",
-        }}
-        transition={{ duration: 0.8 }}
-        style={S.regionGlow}
-      />
-      <div style={S.grain} />
+    <div className="page" style={{ "--accent": active?.color || "#2f8cff" }}>
+      <div className="bg-gradient" />
+      <div className="bg-orb bg-orb-one" />
+      <div className="bg-orb bg-orb-two" />
+      <div className="bg-grid" />
 
-      {/* HEADER */}
-      <header style={S.header}>
-        <div style={S.statusBar}>
-          <div style={S.statusIndicator}>
-            <motion.div
-              animate={{ opacity: [1, 0.3, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              style={S.liveDot}
-            />
-            <span style={S.liveText}>LIVE SCAN</span>
-          </div>
-          <div style={S.systemInfo}>
-            <span>NEURAL CONNECTOME v3.0</span>
-            <span style={S.uptime}>
-              UPTIME: {minutes}:{secs}
-            </span>
-          </div>
+      <header className="hero">
+        <div className="hero-badge">Neuroanatomy + AI • Clinical Interface</div>
+        <h1 className="hero-title">Neural Connectome</h1>
+        <p className="hero-subtitle">
+          Peta anatomi otak yang detail, informatif, dan mudah dibaca. Dirancang
+          seperti dashboard dokter modern: anatomi manusia, kecerdasan buatan,
+          dan empati dalam satu tampilan.
+        </p>
+
+        <div className="hero-stats">
+          <StatPill label="Regions" value={`${brainRegions.length} / 10`} />
+          <StatPill label="Avg Activity" value={`${stats.avgActivity}%`} />
+          <StatPill
+            label="Connections"
+            value={`${stats.totalConnections.toLocaleString()}+`}
+          />
         </div>
 
-        <motion.h1
-          style={S.title}
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <span style={S.titleMain}>Neural Connectome</span>
-          <span style={S.titleSub}>NEURAL ARCHITECTURE MAP</span>
-        </motion.h1>
-
-        <p style={S.subtitle}>
-          Interactive Neuroanatomy Visualization • 10 Major Regions • Real-time
-          Activity Simulation
-        </p>
+        <div className="hero-controls">
+          {[
+            { id: "anatomy", label: "Anatomy" },
+            { id: "connections", label: "Circuits" },
+            { id: "functions", label: "Functions" },
+          ].map((mode) => (
+            <button
+              key={mode.id}
+              onClick={() => setViewMode(mode.id)}
+              className={`pill-button ${
+                viewMode === mode.id ? "is-active" : ""
+              }`}
+            >
+              {mode.label}
+            </button>
+          ))}
+          <div className="pill-button is-muted">3D View Soon</div>
+        </div>
       </header>
 
-      {/* VIEW MODE SELECTOR */}
-      <div style={S.viewSelector}>
-        {["anatomy", "connections", "functions"].map((mode) => (
-          <button
-            key={mode}
-            onClick={() => setViewMode(mode)}
-            style={{
-              ...S.viewButton,
-              background:
-                viewMode === mode
-                  ? active
-                    ? `${active.color}20`
-                    : "rgba(0,200,255,0.15)"
-                  : "transparent",
-              borderColor:
-                viewMode === mode
-                  ? active
-                    ? active.color
-                    : "#00c8ff"
-                  : "rgba(255,255,255,0.1)",
-              color: viewMode === mode ? "#fff" : "#888",
-            }}
-          >
-            {mode.toUpperCase()}
-          </button>
-        ))}
-      </div>
-
-      {/* MAIN CONTENT */}
-      <div style={S.mainContent}>
-        {/* LEFT PANEL - BRAIN VISUALIZATION */}
-        <div style={S.visualizationPanel}>
-          <CornerBrackets
-            color={active ? `${active.color}50` : "rgba(0,200,255,0.25)"}
-            size={20}
-          />
-          <div style={S.panelLabel}>
-            <span style={{ color: "#00c8ff" }}>◆</span> SAGITTAL VIEW •
-            INTERACTIVE MAP
+      <main className="content">
+        <section className="panel map-panel">
+          <div className="panel-header">
+            <div>
+              <p className="panel-title">Sagittal Brain Map</p>
+              <p className="panel-caption">
+                Hover atau klik region untuk detail penuh
+              </p>
+            </div>
+            <div className="panel-legend">
+              <span className="legend-dot" />
+              <span>Medical-grade visualization</span>
+            </div>
           </div>
 
-          <div style={S.brainContainer}>
-            <svg
-              viewBox="60 50 580 500"
-              style={{ width: "100%", height: "100%", display: "block" }}
-            >
+          <div className="brain-container">
+            <svg viewBox="60 50 580 500" aria-label="Brain map">
               <defs>
                 <filter id="regionGlow">
-                  <feGaussianBlur stdDeviation="8" result="blur" />
+                  <feGaussianBlur stdDeviation="10" result="blur" />
                   <feComposite in="SourceGraphic" in2="blur" operator="over" />
                 </filter>
                 <filter id="softShadow">
                   <feDropShadow
                     dx="0"
-                    dy="4"
-                    stdDeviation="6"
-                    floodColor="#000"
-                    floodOpacity="0.4"
+                    dy="6"
+                    stdDeviation="8"
+                    floodColor="#0b1220"
+                    floodOpacity="0.35"
                   />
                 </filter>
                 <linearGradient
@@ -710,12 +622,11 @@ export default function UltimateBrainMap() {
                   x2="100%"
                   y2="100%"
                 >
-                  <stop offset="0%" stopColor="rgba(0,200,255,0.05)" />
-                  <stop offset="100%" stopColor="rgba(0,200,255,0.01)" />
+                  <stop offset="0%" stopColor="rgba(47,140,255,0.08)" />
+                  <stop offset="100%" stopColor="rgba(0,0,0,0)" />
                 </linearGradient>
               </defs>
 
-              {/* Background grid */}
               <rect
                 x="60"
                 y="50"
@@ -724,7 +635,6 @@ export default function UltimateBrainMap() {
                 fill="url(#brainGradient)"
               />
 
-              {/* Subtle grid lines */}
               {[...Array(12)].map((_, i) => (
                 <line
                   key={`v${i}`}
@@ -732,8 +642,8 @@ export default function UltimateBrainMap() {
                   y1="50"
                   x2={60 + i * 48}
                   y2="550"
-                  stroke="rgba(0,200,255,0.04)"
-                  strokeWidth="0.5"
+                  stroke="rgba(75,120,170,0.08)"
+                  strokeWidth="0.6"
                 />
               ))}
               {[...Array(10)].map((_, i) => (
@@ -743,32 +653,26 @@ export default function UltimateBrainMap() {
                   y1={50 + i * 50}
                   x2="640"
                   y2={50 + i * 50}
-                  stroke="rgba(0,200,255,0.04)"
-                  strokeWidth="0.5"
+                  stroke="rgba(75,120,170,0.08)"
+                  strokeWidth="0.6"
                 />
               ))}
 
-              {/* Skull outline */}
               <ellipse
                 cx="380"
                 cy="290"
                 rx="260"
                 ry="230"
                 fill="none"
-                stroke="rgba(0,200,255,0.1)"
-                strokeWidth="1.5"
-                strokeDasharray="8 4"
+                stroke="rgba(70,120,180,0.2)"
+                strokeWidth="2"
+                strokeDasharray="10 6"
               />
 
-              {/* Scan line */}
-              <ScanLine />
-
-              {/* Neural connections for active region */}
               {active && viewMode === "connections" && (
                 <NeuralConnections activeRegion={active} />
               )}
 
-              {/* Brain regions */}
               {brainRegions.map((r) => {
                 const isActive = active?.id === r.id;
                 const isOther = active && active.id !== r.id;
@@ -776,7 +680,7 @@ export default function UltimateBrainMap() {
                 return (
                   <g
                     key={r.id}
-                    style={{ cursor: "pointer" }}
+                    className="region-group"
                     onMouseEnter={() => setHovered(r)}
                     onMouseLeave={() => setHovered(null)}
                     onClick={() =>
@@ -787,10 +691,10 @@ export default function UltimateBrainMap() {
                       <motion.path
                         d={r.path}
                         fill={r.color}
-                        opacity="0.15"
+                        opacity="0.2"
                         filter="url(#regionGlow)"
                         initial={{ opacity: 0 }}
-                        animate={{ opacity: 0.15 }}
+                        animate={{ opacity: 0.2 }}
                         transition={{ duration: 0.5 }}
                       />
                     )}
@@ -799,14 +703,14 @@ export default function UltimateBrainMap() {
                       d={r.path}
                       animate={{
                         fill: isActive
-                          ? `${r.color}80`
+                          ? `${r.color}99`
                           : isOther
-                            ? "rgba(30,35,50,0.9)"
-                            : "rgba(40,45,60,0.9)",
+                            ? "rgba(200,210,225,0.15)"
+                            : "rgba(210,220,235,0.35)",
                         stroke: isActive
                           ? r.accentColor
-                          : "rgba(100,150,200,0.3)",
-                        strokeWidth: isActive ? 2.5 : 1,
+                          : "rgba(130,160,200,0.35)",
+                        strokeWidth: isActive ? 2.6 : 1.4,
                       }}
                       transition={{ duration: 0.3 }}
                       filter="url(#softShadow)"
@@ -816,19 +720,13 @@ export default function UltimateBrainMap() {
                       x={r.labelX}
                       y={r.labelY}
                       textAnchor="middle"
-                      fill={
-                        isActive
-                          ? "#fff"
-                          : isOther
-                            ? "rgba(160,160,160,0.4)"
-                            : "rgba(200,210,225,0.9)"
-                      }
+                      className={`region-label ${isActive ? "is-active" : ""}`}
                       style={{
-                        fontSize: 12,
-                        fontWeight: isActive ? 700 : 500,
-                        pointerEvents: "none",
-                        fontFamily: "'Inter', sans-serif",
-                        textShadow: isActive ? `0 0 10px ${r.color}` : "none",
+                        fill: isActive
+                          ? "#0b1220"
+                          : isOther
+                            ? "rgba(70,90,120,0.4)"
+                            : "rgba(40,60,90,0.8)",
                       }}
                     >
                       {r.label}
@@ -854,20 +752,13 @@ export default function UltimateBrainMap() {
             </svg>
           </div>
 
-          {/* Coordinates */}
-          <div style={S.coordinates}>
-            <span>X: 60-640 • Y: 50-550</span>
-            <span>SAGITTAL PLANE</span>
+          <div className="panel-footer">
+            <span>Axis: X 60-640 · Y 50-550</span>
+            <span>Sagittal plane • 2D clinical view</span>
           </div>
-        </div>
+        </section>
 
-        {/* RIGHT PANEL - INFORMATION */}
-        <div style={S.infoPanel}>
-          <CornerBrackets
-            color={active ? `${active.color}40` : "rgba(0,200,255,0.2)"}
-            size={16}
-          />
-
+        <section className="panel info-panel">
           <AnimatePresence mode="wait">
             {active ? (
               <motion.div
@@ -876,179 +767,104 @@ export default function UltimateBrainMap() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3 }}
-                style={S.infoContent}
+                className="info-content"
               >
-                {/* Region Header */}
-                <div style={S.regionHeader}>
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: 12 }}
-                  >
+                <div className="region-header">
+                  <div className="region-title">
                     <div
-                      style={{
-                        width: 40,
-                        height: 40,
-                        background: `${active.color}20`,
-                        borderRadius: 10,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: 20,
-                        border: `2px solid ${active.color}40`,
-                      }}
+                      className="region-icon"
+                      style={{ background: `${active.color}1f` }}
                     >
                       {active.emoji}
                     </div>
                     <div>
-                      <h2
-                        style={{
-                          color: active.color,
-                          margin: "0 0 4px",
-                          fontSize: 24,
-                          fontWeight: 700,
-                          letterSpacing: -0.5,
-                        }}
-                      >
-                        {active.title}
-                      </h2>
-                      <p
-                        style={{
-                          color: active.accentColor,
-                          fontSize: 12,
-                          margin: 0,
-                          letterSpacing: 1.5,
-                          textTransform: "uppercase",
-                        }}
-                      >
+                      <h2 style={{ color: active.color }}>{active.title}</h2>
+                      <p style={{ color: active.accentColor }}>
                         {active.subtitle}
                       </p>
                     </div>
                   </div>
-
-                  <motion.div
-                    animate={{ opacity: [1, 0.5, 1] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                    style={{
-                      fontSize: 10,
-                      color: "#00c8ff",
-                      letterSpacing: 1.5,
-                      padding: "4px 12px",
-                      background: "rgba(0,200,255,0.1)",
-                      borderRadius: 20,
-                      border: "1px solid rgba(0,200,255,0.3)",
-                    }}
-                  >
-                    ● ACTIVE
-                  </motion.div>
+                  <div className="region-badge">Active Focus</div>
                 </div>
 
-                {/* Divider */}
-                <div
-                  style={{
-                    height: 1,
-                    background: `linear-gradient(90deg, ${active.color}40, transparent)`,
-                    margin: "16px 0",
-                  }}
-                />
-
-                {/* Description */}
-                <InfoCard title="OVERVIEW" color={active.color}>
-                  <p style={S.description}>{active.desc}</p>
-                  <p
-                    style={{
-                      ...S.description,
-                      marginTop: 12,
-                      fontSize: 12,
-                      opacity: 0.9,
-                    }}
-                  >
-                    {active.detailedDesc}
-                  </p>
-                </InfoCard>
-
-                {/* Stats */}
-                <div style={{ display: "flex", gap: 12, marginBottom: 16 }}>
-                  <div style={S.statCard}>
-                    <div style={S.statLabel}>NEURAL ACTIVITY</div>
-                    <div style={{ ...S.statValue, color: active.color }}>
+                <div className="stat-grid">
+                  <div className="stat-card">
+                    <span>Neural Activity</span>
+                    <strong style={{ color: active.color }}>
                       {active.activity}%
-                    </div>
+                    </strong>
                   </div>
-                  <div style={S.statCard}>
-                    <div style={S.statLabel}>CONNECTIONS</div>
-                    <div style={{ ...S.statValue, color: active.color }}>
-                      {active.connections}
-                    </div>
+                  <div className="stat-card">
+                    <span>Connection Count</span>
+                    <strong style={{ color: active.color }}>
+                      {active.connectionCount}
+                    </strong>
                   </div>
-                  <div style={S.statCard}>
-                    <div style={S.statLabel}>BRAIN VOLUME</div>
-                    <div style={{ ...S.statValue, color: active.color }}>
+                  <div className="stat-card">
+                    <span>Brain Volume</span>
+                    <strong style={{ color: active.color }}>
                       {active.volume}
-                    </div>
+                    </strong>
                   </div>
                 </div>
 
-                {/* Activity Bars */}
-                <InfoCard title="ACTIVITY METRICS" color={active.color}>
-                  <ActivityBar
-                    value={active.activity}
-                    color={active.color}
-                    label="Neural Activity"
-                  />
-                  <ActivityBar
-                    value={Math.min(100, Math.round(active.connections / 3.5))}
-                    color={active.color}
-                    label="Connectivity Density"
-                  />
+                <InfoCard title="Overview">
+                  <p className="body-text">{active.desc}</p>
+                  <p className="body-text subtle">{active.detailedDesc}</p>
                 </InfoCard>
 
-                {/* Functions */}
-                <InfoCard title="PRIMARY FUNCTIONS" color={active.color}>
-                  <div style={S.functionsGrid}>
-                    {active.functions.map((func, index) => (
-                      <motion.div
-                        key={func}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: index * 0.1 }}
-                        style={{
-                          padding: "8px 12px",
-                          background: `${active.color}10`,
-                          borderRadius: 8,
-                          fontSize: 11,
-                          color: active.color,
-                          border: `1px solid ${active.color}30`,
-                          textAlign: "center",
-                        }}
-                      >
-                        {func}
-                      </motion.div>
+                <InfoCard title="Key Structures">
+                  <div className="chip-grid">
+                    {active.keyStructures.map((item) => (
+                      <span key={item} className="chip">
+                        {item}
+                      </span>
                     ))}
                   </div>
                 </InfoCard>
 
-                {/* Neurotransmitters */}
-                <InfoCard title="KEY NEUROTRANSMITTERS" color={active.color}>
-                  <div style={S.neurotransmitters}>
+                <InfoCard title="Primary Functions">
+                  <div className="chip-grid">
+                    {active.functions.map((item) => (
+                      <span key={item} className="chip is-strong">
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </InfoCard>
+
+                <InfoCard title="Connectivity Map">
+                  <div className="connection-list">
+                    {active.connections.map((conn) => {
+                      const target = brainRegions.find(
+                        (region) => region.id === conn.targetId,
+                      );
+                      return (
+                        <div key={conn.targetId} className="connection-item">
+                          <span>{target ? target.label : conn.targetId}</span>
+                          <span className="connection-type">{conn.type}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </InfoCard>
+
+                <InfoCard title="Neurochemistry">
+                  <div className="chip-grid">
                     {active.neurotransmitters?.map((nt) => (
-                      <span key={nt} style={S.neurotransmitter}>
+                      <span key={nt} className="chip is-soft">
                         {nt}
                       </span>
                     ))}
                   </div>
                 </InfoCard>
 
-                {/* Clinical Note */}
-                <InfoCard title="CLINICAL SIGNIFICANCE" color={active.color}>
-                  <p
-                    style={{
-                      fontSize: 12,
-                      color: "#aaa",
-                      margin: 0,
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    {active.clinical}
-                  </p>
+                <InfoCard title="Clinical Significance">
+                  <p className="body-text subtle">{active.clinical}</p>
+                </InfoCard>
+
+                <InfoCard title="AI Analogy">
+                  <p className="body-text">{active.aiAnalogy}</p>
                 </InfoCard>
               </motion.div>
             ) : (
@@ -1056,406 +872,46 @@ export default function UltimateBrainMap() {
                 key="empty"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                style={S.emptyState}
+                className="empty-state"
               >
-                <div
-                  style={{
-                    fontSize: 48,
-                    opacity: 0.1,
-                    marginBottom: 20,
-                  }}
-                >
-                  🧠
-                </div>
-                <div
-                  style={{
-                    fontSize: 14,
-                    color: "#555",
-                    letterSpacing: 2,
-                    marginBottom: 8,
-                    textTransform: "uppercase",
-                  }}
-                >
-                  SELECT A BRAIN REGION
-                </div>
-                <div
-                  style={{
-                    fontSize: 12,
-                    color: "#444",
-                    textAlign: "center",
-                    maxWidth: 300,
-                  }}
-                >
-                  Hover over or click any region on the brain map to view
-                  detailed neuroanatomical information, functions, and clinical
-                  significance.
-                </div>
+                <div className="empty-icon">🧠</div>
+                <h3>Pilih sebuah region</h3>
+                <p>
+                  Klik atau hover region pada peta untuk melihat detail anatomi,
+                  fungsi, konektivitas, dan signifikansi klinis.
+                </p>
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
-      </div>
+        </section>
+      </main>
 
-      {/* LEGEND */}
-      <div style={S.legend}>
+      <section className="legend">
         {brainRegions.map((r) => {
           const isSelected = selected?.id === r.id;
           return (
-            <motion.button
+            <button
               key={r.id}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              className={`legend-item ${isSelected ? "is-selected" : ""}`}
               onMouseEnter={() => setHovered(r)}
               onMouseLeave={() => setHovered(null)}
               onClick={() => setSelected(isSelected ? null : r)}
               style={{
-                ...S.legendItem,
-                background: isSelected
-                  ? `linear-gradient(135deg, ${r.color}20, ${r.color}10)`
-                  : "rgba(255,255,255,0.03)",
-                border: `1px solid ${isSelected ? r.color + "50" : "rgba(255,255,255,0.1)"}`,
-                color: isSelected ? r.color : "#888",
+                borderColor: isSelected ? r.color : "rgba(80,110,150,0.25)",
               }}
             >
-              <div
-                style={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: "50%",
-                  background: `linear-gradient(135deg, ${r.color}, ${r.accentColor})`,
-                  marginRight: 10,
-                }}
-              />
-              <span
-                style={{ fontSize: 11, fontWeight: isSelected ? 600 : 400 }}
-              >
-                {r.label}
-              </span>
-            </motion.button>
+              <span className="legend-dot" style={{ background: r.color }} />
+              <span>{r.label}</span>
+            </button>
           );
         })}
-      </div>
+      </section>
 
-      {/* FOOTER */}
-      <div style={S.footer}>
-        <div style={S.footerContent}>
-          <span>© 2025 NEURAL CONNECTOME PROJECT</span>
-          <span>
-            REGIONS MAPPED: {brainRegions.length}/10 • 1.2M NEURAL CONNECTIONS
-          </span>
-          <motion.span
-            animate={{ opacity: [1, 0.5, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            style={{
-              color: "#00c8ff",
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-            }}
-          >
-            <div
-              style={{
-                width: 6,
-                height: 6,
-                borderRadius: "50%",
-                background: "#00c8ff",
-              }}
-            />
-            SYSTEM NOMINAL
-          </motion.span>
-        </div>
-      </div>
+      <footer className="footer">
+        <span>© 2026 Neural Connectome Project</span>
+        <span>Medical visualization • human anatomy x artificial insight</span>
+        <span>Designed for clarity, empathy, and precision</span>
+      </footer>
     </div>
   );
 }
-
-/* ─── ENHANCED STYLES ─── */
-const S = {
-  root: {
-    minHeight: "100vh",
-    width: "100%",
-    background: "#0a0a12",
-    color: "#fff",
-    fontFamily: "'Inter', 'Segoe UI', sans-serif",
-    padding: "24px 32px",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    position: "relative",
-    overflowX: "hidden",
-    boxSizing: "border-box",
-  },
-  backgroundGradient: {
-    position: "absolute",
-    inset: 0,
-    background:
-      "linear-gradient(135deg, #0a0a12 0%, #121225 50%, #0a0a18 100%)",
-    zIndex: 0,
-  },
-  regionGlow: {
-    position: "absolute",
-    inset: 0,
-    pointerEvents: "none",
-    zIndex: 1,
-  },
-  grain: {
-    position: "absolute",
-    inset: 0,
-    pointerEvents: "none",
-    zIndex: 2,
-    opacity: 0.02,
-    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.15'/%3E%3C/svg%3E")`,
-  },
-  header: {
-    position: "relative",
-    zIndex: 10,
-    textAlign: "center",
-    marginBottom: 24,
-    width: "100%",
-    maxWidth: 1200,
-  },
-  statusBar: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 20,
-    padding: "12px 24px",
-    background: "rgba(255,255,255,0.03)",
-    borderRadius: 12,
-    border: "1px solid rgba(255,255,255,0.05)",
-  },
-  statusIndicator: {
-    display: "flex",
-    alignItems: "center",
-    gap: 8,
-  },
-  liveDot: {
-    width: 8,
-    height: 8,
-    borderRadius: "50%",
-    background: "#00c8ff",
-    boxShadow: "0 0 10px #00c8ff",
-  },
-  liveText: {
-    fontSize: 11,
-    color: "#00c8ff",
-    letterSpacing: 1.5,
-    fontWeight: 600,
-  },
-  systemInfo: {
-    display: "flex",
-    gap: 24,
-    fontSize: 11,
-    color: "#666",
-    letterSpacing: 1.2,
-  },
-  uptime: {
-    fontFamily: "'JetBrains Mono', monospace",
-    color: "#888",
-  },
-  title: {
-    fontSize: 42,
-    fontWeight: 800,
-    letterSpacing: 1,
-    margin: "0 0 8px",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 4,
-  },
-  titleMain: {
-    background: "linear-gradient(135deg, #fff 0%, #a0a0ff 100%)",
-    WebkitBackgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-    backgroundClip: "text",
-  },
-  titleSub: {
-    fontSize: 14,
-    fontWeight: 400,
-    color: "#666",
-    letterSpacing: 3,
-    textTransform: "uppercase",
-  },
-  subtitle: {
-    fontSize: 13,
-    color: "#777",
-    letterSpacing: 1,
-    margin: 0,
-    maxWidth: 600,
-    margin: "0 auto",
-  },
-  viewSelector: {
-    display: "flex",
-    gap: 8,
-    marginBottom: 24,
-    zIndex: 10,
-  },
-  viewButton: {
-    padding: "8px 20px",
-    borderRadius: 20,
-    border: "1px solid",
-    fontSize: 10,
-    fontWeight: 600,
-    letterSpacing: 1.2,
-    cursor: "pointer",
-    transition: "all 0.3s",
-    textTransform: "uppercase",
-  },
-  mainContent: {
-    display: "flex",
-    gap: 24,
-    width: "100%",
-    maxWidth: 1400,
-    zIndex: 5,
-    position: "relative",
-    marginBottom: 24,
-  },
-  visualizationPanel: {
-    flex: 1.6,
-    position: "relative",
-    background: "rgba(15,18,30,0.7)",
-    borderRadius: 20,
-    border: "1px solid rgba(0,200,255,0.15)",
-    padding: "40px 20px 20px",
-    backdropFilter: "blur(10px)",
-    boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
-  },
-  panelLabel: {
-    position: "absolute",
-    top: 15,
-    left: 20,
-    fontSize: 10,
-    color: "#666",
-    letterSpacing: 2,
-    fontWeight: 600,
-    textTransform: "uppercase",
-  },
-  brainContainer: {
-    width: "100%",
-    height: 500,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  coordinates: {
-    display: "flex",
-    justifyContent: "space-between",
-    fontSize: 9,
-    color: "#555",
-    letterSpacing: 1.2,
-    marginTop: 12,
-    padding: "0 12px",
-  },
-  infoPanel: {
-    flex: 1,
-    position: "relative",
-    background: "rgba(15,18,30,0.7)",
-    borderRadius: 20,
-    border: "1px solid rgba(0,200,255,0.15)",
-    padding: 28,
-    backdropFilter: "blur(10px)",
-    minHeight: 600,
-    display: "flex",
-    flexDirection: "column",
-    boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
-    overflowY: "auto",
-  },
-  infoContent: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-  },
-  regionHeader: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    marginBottom: 20,
-  },
-  description: {
-    fontSize: 13,
-    color: "#ccc",
-    lineHeight: 1.7,
-    margin: 0,
-  },
-  statCard: {
-    flex: 1,
-    background: "rgba(255,255,255,0.02)",
-    borderRadius: 12,
-    padding: "12px",
-    border: "1px solid rgba(255,255,255,0.05)",
-    textAlign: "center",
-  },
-  statLabel: {
-    fontSize: 9,
-    color: "#666",
-    letterSpacing: 1.2,
-    marginBottom: 6,
-    textTransform: "uppercase",
-  },
-  statValue: {
-    fontSize: 22,
-    fontWeight: 700,
-    fontFamily: "'JetBrains Mono', monospace",
-  },
-  functionsGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
-    gap: 8,
-  },
-  neurotransmitters: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: 8,
-  },
-  neurotransmitter: {
-    padding: "6px 12px",
-    background: "rgba(255,255,255,0.05)",
-    borderRadius: 6,
-    fontSize: 11,
-    color: "#aaa",
-    border: "1px solid rgba(255,255,255,0.1)",
-  },
-  emptyState: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    textAlign: "center",
-    padding: "40px 20px",
-  },
-  legend: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: 8,
-    justifyContent: "center",
-    marginBottom: 20,
-    zIndex: 10,
-    maxWidth: 1000,
-  },
-  legendItem: {
-    display: "flex",
-    alignItems: "center",
-    padding: "8px 16px",
-    borderRadius: 20,
-    fontSize: 12,
-    cursor: "pointer",
-    transition: "all 0.3s",
-    backdropFilter: "blur(4px)",
-  },
-  footer: {
-    width: "100%",
-    maxWidth: 1400,
-    padding: "16px 0",
-    borderTop: "1px solid rgba(255,255,255,0.05)",
-    zIndex: 10,
-  },
-  footerContent: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    fontSize: 10,
-    color: "#555",
-    letterSpacing: 1.2,
-  },
-};
